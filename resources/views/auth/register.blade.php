@@ -39,6 +39,38 @@
                             </div>
                         </div>
 
+                        <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
+                            <label for="phone" class="col-md-4 control-label">Phone</label>
+
+                            <div class="col-md-6">
+                                <input id="phone" type="text" class="form-control" name="phone" value="{{ old('phone') }}" required>
+
+                                @if ($errors->has('phone'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('phone') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group {{ $errors->has('district') ? ' has-error' : '' }}">
+                            <label for="district" class="col-md-4 control-label">Select district:</label>
+                           <div class="col-md-6">
+                               <select class="form-control" id="district" name="district">
+                                   <option>--Select--</option>
+                                   <option value="Dhaka" {{ old('district') == 'Dhaka' ? 'selected' : '' }}>Dhaka</option>
+                                   <option value="Comilla" {{ old('district') == 'Comilla' ? 'selected' : '' }}>Comilla</option>
+                                   <option value="Chittagong" {{ old('district') == 'Chittagong' ? 'selected' : '' }}>Chittagong</option>
+                                   <option value="Rajshahi" {{ old('district') == 'Rajshahi' ? 'selected' : '' }}>Rajshahi</option>
+                               </select>
+                               @if ($errors->has('district'))
+                                   <span class="help-block">
+                                        <strong>{{ $errors->first('district') }}</strong>
+                                    </span>
+                               @endif
+                           </div>
+                        </div>
+
                         <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
                             <label for="password" class="col-md-4 control-label">Password</label>
 
