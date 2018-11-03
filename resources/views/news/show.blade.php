@@ -11,6 +11,16 @@
                 </blockquote>
                 <p>{!! html_entity_decode($news->body) !!}</p>
             </div>
+            @if($news->photos)
+                <div class="col-md-4">
+                    <h4>Photos:</h4>
+                    <div class="list-group">
+                        @foreach($news->photos as $photo)
+                        <a href="{{ $photo->file }}" target="_blank" class="list-group-item">{{ $photo->file }}</a>
+                       @endforeach
+                    </div>
+                </div>
+            @endif
         </div>
     </div>
 @endsection

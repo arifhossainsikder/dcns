@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Category;
+use App\Photo;
 use App\Http\Requests\NewsRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -43,7 +44,18 @@ class NewsController extends Controller {
 		$user                = Auth::user();
 		$input               = $request->all();
 		$input['word_count'] = str_word_count( html_entity_decode( $request->body ) );
-		$user->news()->create( $input );
+		$news = $user->news()->create( $input );
+		if ($files = $request->file('photos'))
+		{
+			foreach ($files as $file){
+				$name = time(). $file->getClientOriginalName();
+				$file->move('images',$name);
+				$photo = Photo::create([
+					'news_id' => $news->id,
+					'file'=>$name
+				]);
+			}
+		}
 		$request->session()->flash( 'message.level', 'success' );
 		$request->session()->flash( 'message.content', 'News submitted successfully!' );
 

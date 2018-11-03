@@ -10,7 +10,7 @@
                         {!! session('message.content') !!}
                     </div>
                 @endif
-                {!! Form::open(['method' => 'POST', 'action' => 'NewsController@store']) !!}
+                {!! Form::open(['method' => 'POST', 'action' => 'NewsController@store','files'=>true]) !!}
                 <div class="form-group">
                     {!! Form::label('title','Title:') !!}
                     {!! Form::text('title',null, ['class' => 'form-control','id'=> 'title','placeholder' => 'Enter news title']) !!}
@@ -22,6 +22,12 @@
                 <div class="form-group">
                     {!! Form::label('body','Description:') !!}
                     {!! Form::textarea('body',null, ['class' => 'form-control']) !!}
+                </div>
+
+                <div class="form-group">
+                    {!! Form::label('photos','Photo (You can choose multiple):') !!}
+                    <input type="file" multiple class="form-control" name="photos[]">
+{{--                    {!! Form::file('photos[]',null,['multiple' => true,'class' => 'form-control']) !!}--}}
                 </div>
                 <button type="submit" class="btn btn-default">Submit</button>
                 {!! Form::close() !!}

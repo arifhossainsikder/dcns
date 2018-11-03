@@ -27,6 +27,8 @@ class NewsRequest extends FormRequest
 	        'title' => 'required',
 	        'category_id' => 'required',
 	        'body' => 'required',
+	        'photos.*' => 'mimes:jpeg,png,jpg,gif,svg|max:2048'
+
         ];
     }
 
@@ -36,6 +38,8 @@ class NewsRequest extends FormRequest
 			'title.required' => 'Please enter title.',
 			'category_id.required' => 'Please select category.',
 			'body.required' => 'Please enter news description.',
+			'photos.*.mimes' => 'Photo type must be: jpeg,png,jpg,gif,svg',
+			'photos.*.max' => 'A photo must be less than 5 MB',
 		];
 	}
 }
