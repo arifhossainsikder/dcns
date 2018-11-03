@@ -19,6 +19,11 @@
         </div>
         <div class="row">
             <div class="col-md-8">
+                @if(session()->has('message.level'))
+                    <div class="alert alert-{{ session('message.level') }}">
+                        {!! session('message.content') !!}
+                    </div>
+                @endif
                 <table class="table table-hover">
                     <thead>
                     <tr>

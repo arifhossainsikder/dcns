@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Category;
+use App\News;
 use App\Photo;
 use App\Http\Requests\NewsRequest;
 use Illuminate\Http\Request;
@@ -83,7 +84,9 @@ class NewsController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function edit( $id ) {
-		//
+		$news = News::findOrFail($id);
+		$categories = Category::pluck( 'name', 'id' )->all();
+		return view('news.edit', compact('news','categories'));
 	}
 
 	/**
@@ -94,8 +97,27 @@ class NewsController extends Controller {
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function update( Request $request, $id ) {
-		//
+	public function update( NewsRequest $request, $id ) {
+		$this->validate( $request, $request->messages() );
+		$user                = Auth::user();
+		$input               = $request->all();
+		$input['word_count'] = str_word_count( html_entity_decode( $request->body ) );
+		$user->news()->whereId($id)->first()->update( $input );
+		if ($files = $request->file('photos'))
+		{
+			foreach ($files as $file){
+				$name = time(). $file->getClientOriginalName();
+				$file->move('images',$name);
+				$photo = Photo::create([
+					'news_id' => $id,
+					'file'=>$name
+				]);
+			}
+		}
+		$request->session()->flash( 'message.level', 'success' );
+		$request->session()->flash( 'message.content', 'News updated successfully!' );
+
+		return redirect()->back();
 	}
 
 	/**
@@ -105,7 +127,16 @@ class NewsController extends Controller {
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function destroy( $id ) {
-		//
+	public function destroy(Request $request, $id ) {
+		$news = News::findOrFail($id);
+		if ($news->photos) {
+			foreach ($news->photos as $photo){
+				unlink(public_path() . $photo->file);
+			}
+		}
+		$news->delete();
+		$request->session()->flash('message.level', 'success');
+		$request->session()->flash('message.content', $news->title. ' deleted successfully!');
+		return redirect('/news');
 	}
 }
